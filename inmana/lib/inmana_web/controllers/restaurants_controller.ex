@@ -14,4 +14,20 @@ defmodule InmanaWeb.RestaurantsController do
       |> render("create.json", restaurant: restaurant)
     end
   end
+
+  def index(conn, _params) do
+    restaurants = Inmana.list_restaurant()
+
+    conn
+    |> put_status(:ok)
+    |> render("index.json", restaurants: restaurants)
+  end
+
+  def show(conn, %{"id" => uuid}) do
+    with {:ok, %Restaurant{} = restaurant} <- Inmana.get_restaurant(uuid) do
+      conn
+      |> put_status(:ok)
+      |> render("show.json", restaurant: restaurant)
+    end
+  end
 end
